@@ -1,0 +1,22 @@
+body{
+    background-image: url("../../railway-2439189_1920.jpg");
+}
+
+.jumbotron {
+    background-color: rgba(0, 0, 0, 0) !important; 
+    color: white;
+}
+
+.blue {
+    background-color: rgb(26, 75, 167) !important; 
+    color: white;
+}
+
+.card{
+    border: 1px solid  rgb(26, 75, 167) !important;
+}
+
+#train-table th, td {
+    display: inline-block;
+    width: 16.575%;
+}
