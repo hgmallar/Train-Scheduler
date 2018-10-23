@@ -35,7 +35,7 @@ $("#add-train-btn").on("click", function (event) {
         validUserData = false;
         errorMessage += " Your start time is incorrect.";
     }
-    else if (!/\d\d:\d\d/i.test(first)) {
+    else if (!moment(first, "HH:mm").isValid()) {
         validUserData = false;
         errorMessage += " Your start time is incorrect.";
     }
