@@ -1,3 +1,6 @@
+var validUserData = true;
+var errorMessage = "";
+
 // Initialize Firebase
 var config = {
     apiKey: "AIzaSyAKN45koWKKv0ZR-8ioPHfk7suHU1RVMtM",
@@ -15,17 +18,47 @@ $("#add-train-btn").on("click", function (event) {
 
     //get the input values
     var trainName = $("#train-name-input").val().trim();
-    var dest = $("#destination-input").val().trim();
-    var first = $("#first-input").val().trim();
-    var freq = $("#frequency-input").val().trim();
+    if (!/./.test(trainName)) {
+        errorMessage += " You need to input a train name.";
+        validUserData = false;
+    }
 
-    //push the value to the firebase database
-    firebase.database().ref().push({
-        trainName: trainName,
-        destination: dest,
-        first: first,
-        frequency: freq
-    });
+    var dest = $("#destination-input").val().trim();
+    if (!/./.test(dest)) {
+        errorMessage += " You need to input a train destination.";
+        validUserData = false;
+    }
+
+    var first = $("#first-input").val().trim();
+    console.log(first.length);
+    if (first.length !== 5) {
+        validUserData = false;
+        errorMessage += " Your start time is incorrect.";
+    }
+    else if (!/\d\d:\d\d/i.test(first)) {
+        validUserData = false;
+        errorMessage += " Your start time is incorrect.";
+    }
+    var freq = $("#frequency-input").val().trim();
+    if ((/[^0-9]/.test(freq)) || (!/./.test(freq))) {
+        validUserData = false;
+        errorMessage += " Your frequency is not a number.";
+    }
+
+    if (validUserData) {
+        //push the value to the firebase database
+        firebase.database().ref().push({
+            trainName: trainName,
+            destination: dest,
+            first: first,
+            frequency: freq
+        });
+    }
+    else {
+        $("#errorMessage").text(errorMessage);
+        $('#myModal').modal('show');
+        errorMessage = "";
+    }
 
     //clear input values
     $("#train-name-input").val("");
@@ -57,20 +90,20 @@ firebase.database().ref().on("child_added", function (snapshot) {
 
     // First Time (pushed back 1 day to make sure it comes before current time)
     var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "day");
-    
+
     // Difference between the times
     var diffTime = moment().diff(firstTimeConverted, "minutes");
-   
+
     // Time apart (remainder)
     var tRemainder = diffTime % tFrequency;
-    
+
     // Minute Until Train
     var tMinutesTillTrain = tFrequency - tRemainder;
 
     // Next Train
     var nextTrain = moment().add(tMinutesTillTrain, "minutes");
     nextTrain = nextTrain.format("LT");
- 
+
     var next = $("<td scope='col'>").text(nextTrain);
     newRow.append(next);
     var mins = $("<td scope='col'>").text(tMinutesTillTrain);
