@@ -56,7 +56,7 @@ $("#add-train-btn").on("click", function (event) {
     }
     else {
         $("#errorMessage").text(errorMessage);
-        $('#myModal').modal('show');
+        $("#myModal").modal("show");
         errorMessage = "";
     }
 
