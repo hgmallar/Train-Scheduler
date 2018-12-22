@@ -1,5 +1,7 @@
 # Train Scheduler
 
+![frontpage image](traintime.PNG)
+
 https://hgmallar.github.io/Train-Scheduler/
 
 ## Train Scheduler
